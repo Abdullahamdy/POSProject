@@ -27,8 +27,9 @@
             {{--<li><a href="{{ route('dashboard.categories.index') }}"><i class="fa fa-book"></i><span>@lang('site.categories')</span></a></li>--}}
             {{----}}
             {{----}}
-            {{--<li><a href="{{ route('dashboard.users.index') }}"><i class="fa fa-users"></i><span>@lang('site.users')</span></a></li>--}}
-
+            @if (auth()->user()->hasPermission('users-read'))
+            <li><a href="{{ route('dashboard.users.index') }}"><i class="fa fa-users"></i><span>@lang('site.users')</span></a></li>
+               @endif
             {{--<li class="treeview">--}}
             {{--<a href="#">--}}
             {{--<i class="fa fa-pie-chart"></i>--}}

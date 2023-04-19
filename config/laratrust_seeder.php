@@ -14,13 +14,11 @@ return [
     'roles_structure' => [
         'super_admin' => [
             'users' => 'c,r,u,d',
-           
+
         ],
 
 
-        'role_name' => [
-            'module_1_name' => 'c,r,u,d',
-        ]
+        'admin' => []
     ],
 
     'permissions_map' => [
