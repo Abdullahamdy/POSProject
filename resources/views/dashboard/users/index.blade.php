@@ -18,10 +18,10 @@
                     <div class="box-header">
                         <h1 class="box-title">@lang('site.users')</h1>
 
-                        <form action="">
+                        <form action="{{ route('dashboard.users.index') }}">
                             <div class="row">
-                                <div class="col-md-4">
-                                    <input type="text" name="search" id="">
+                                <div class="col-md-6">
+                                    <input type="text" name="search" value="{{ request()->search }}" id="">
 
                                 </div>
                                 <div class="col-md-4">
@@ -89,6 +89,7 @@
                                 </tbody>
 
                             </table><!-- end of table -->
+                            {{ $users->appends(request()->query())->links() }}
                         @else
                             <h1>@lang('site.no_data_found')</h1>
                         @endif

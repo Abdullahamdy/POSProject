@@ -13,9 +13,24 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+
+    public function __construct()
     {
-        $users = User::all();
+        $this->middleware(['permission:users-read'])->only(['index']);
+        $this->middleware(['permission:users-create'])->only(['create']);
+        $this->middleware(['permission:users-update'])->only(['edit']);
+        $this->middleware(['permission:users-delete'])->only(['destroy']);
+
+    }
+    public function index(Request $request)
+    {
+
+        $users = User::whereRoleIs('admin')->when($request->search,function($query) use($request){
+            $query->where('first_name','like','%'.$request->search.'%')
+
+            ->orwhere('last_name','like','%'.$request->search.'%');
+        })->latest()->paginate(5);
         return view('dashboard.users.index',compact('users'));
     }
 
@@ -94,6 +109,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
+        session()->flash('success',__('site.deleted_successfully'));
         return redirect()->route('dashboard.users.index');
 
     }
