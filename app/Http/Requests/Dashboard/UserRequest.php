@@ -30,17 +30,21 @@ class UserRequest extends FormRequest
                     'first_name' => 'required|max:20',
                     'last_name' => 'required|max:20',
                     'email' => 'required|unique:users',
+                    'image' => 'image',
+                    'permissions' => 'required',
                     'password' => 'required|min:8|confirmed',
 
                 ];
             }
             case 'PUT':
             case 'PATCH':
-            {
+                {
                 return [
                     'first_name' => 'required|max:20',
                     'last_name' => 'required|max:20',
                     'email' => 'required|unique:users,email,'.$this->user->id,
+                    'image' => 'image',
+                    'permissions' => 'required',
                 ];
             }
             default: break;

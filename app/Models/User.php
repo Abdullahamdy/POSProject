@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
+use App\Http\Traits\FilesTrait;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Laratrust\Traits\LaratrustUserTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Laratrust\Traits\LaratrustUserTrait;
 
 class User extends Authenticatable
 {
     use LaratrustUserTrait;
-    use HasApiTokens, HasFactory, Notifiable;
-
+    use HasApiTokens, HasFactory, Notifiable,FilesTrait ;
+    protected $imgFolder = 'uploads/users/';
     /**
      * The attributes that are mass assignable.
      *
@@ -22,6 +23,7 @@ class User extends Authenticatable
     protected $fillable = [
         'first_name',
         'last_name',
+        'image',
         'email',
         'password',
     ];
@@ -35,6 +37,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    protected $appends = ['image_path'];
 
     /**
      * The attributes that should be cast.
@@ -44,4 +47,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getImagePathAttribute(){
+        return asset('uploads/users/'.$this->image);
+    }
 }

@@ -23,8 +23,9 @@
             {{-- @if (auth()->user()->hasPermission('read_users'))
                 <li><a href=""><i class="fa fa-th"></i><span>User</span></a></li>
             @endif --}}
-
-            {{--<li><a href="{{ route('dashboard.categories.index') }}"><i class="fa fa-book"></i><span>@lang('site.categories')</span></a></li>--}}
+            @if (auth()->user()->hasPermission('categories-read'))
+            <li><a href="{{ route('dashboard.categories.index') }}"><i class="fa fa-book"></i><span>@lang('site.categories')</span></a></li>
+           @endif
             {{----}}
             {{----}}
             @if (auth()->user()->hasPermission('users-read'))

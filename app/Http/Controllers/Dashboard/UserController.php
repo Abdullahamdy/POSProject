@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Dashboard;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Intervention\Image\Facades\Image;
+use App\Http\Requests\Dashboard\UserRequest;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -26,10 +28,12 @@ class UserController extends Controller
     public function index(Request $request)
     {
 
-        $users = User::whereRoleIs('admin')->when($request->search,function($query) use($request){
-            $query->where('first_name','like','%'.$request->search.'%')
+        $users = User::whereRoleIs('admin')->where(function($query) use($request){
+          return  $query->when($request->search,function($q) use($request){
 
-            ->orwhere('last_name','like','%'.$request->search.'%');
+            return    $q->where('first_name','like','%'.$request->search.'%')
+                ->orwhere('last_name','like','%'.$request->search.'%');
+            });
         })->latest()->paginate(5);
         return view('dashboard.users.index',compact('users'));
     }
@@ -53,8 +57,17 @@ class UserController extends Controller
      */
     public function store(UserRequest $request )
     {
-        $user_data = $request->except(['password','password_confirmation','permissions']);
+        $user_data = $request->except(['password','password_confirmation','permissions','image']);
         $user_data['password'] = bcrypt($request->password);
+
+        if($request->image){
+            Image::make($request->image)->resize(300,null,function($constraint){
+                // aspectRatio function this function aspectRat width and hight
+                $constraint->aspectRatio();
+            })->save(public_path('uploads/users/'.$request->image->hashName()));
+            $user_data['image'] = $request->image->hashName();
+        }//end of if
+
         $user = User::create($user_data);
         $user->attachRole('admin');
         $user->syncPermissions($request->permissions);
@@ -94,7 +107,14 @@ class UserController extends Controller
     public function update(UserRequest $request, User $user)
     {
         $user_data = $request->except(['permissions']);
-        $user->update($request->all());
+        if($request->image && $user->image != 'default.png'){
+            Storage::disk('public_uploads',)->delete('/users/'.$user->image);
+            Image::make($request->image)->resize(300,null,function($constraint){
+                $constraint->aspectRatio();
+            })->save(public_path('uploads/users/'.$request->image->hashName()));
+            $user_data['image'] = $request->image->hashName();
+        }//end of if
+        $user->update($user_data);
         $user->syncPermissions($request->permissions);
         session()->flash('success',__('site.updated_successfully'));
         return redirect()->route('dashboard.users.index');
@@ -108,6 +128,9 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if($user->image != 'default.png'){
+            Storage::disk('public_uploads',)->delete('/users/'.$user->image);
+        }
         $user->delete();
         session()->flash('success',__('site.deleted_successfully'));
         return redirect()->route('dashboard.users.index');
