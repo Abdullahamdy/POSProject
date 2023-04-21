@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "codezero/laravel-unique-translation": "^4.1",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.7",
@@ -14,7 +15,8 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "3.4",
         "mcamara/laravel-localization": "^1.8",
-        "santigarcor/laratrust": "^6.3"
+        "santigarcor/laratrust": "^6.3",
+        "spatie/laravel-translatable": "^5.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

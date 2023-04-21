@@ -16,94 +16,93 @@ class CategoryController extends Controller
      */
 
 
-     public function __construct()
-     {
+    public function __construct()
+    {
 
-         $this->middleware(['permission:categories-read'])->only(['index']);
-         $this->middleware(['permission:categories-create'])->only(['create']);
-         $this->middleware(['permission:categories-update'])->only(['edit']);
-         $this->middleware(['permission:categories-delete'])->only(['destroy']);
+        $this->middleware(['permission:categories-read'])->only(['index']);
+        $this->middleware(['permission:categories-create'])->only(['create']);
+        $this->middleware(['permission:categories-update'])->only(['edit']);
+        $this->middleware(['permission:categories-delete'])->only(['destroy']);
+    }
+    public function index(Request $request)
+    {
+        $categories = Categroy::when($request->search, function ($query) use ($request) {
+            return $query->where('name', 'like', '%' . $request->search . '%');
+        })->latest()->paginate(5);
+        return view('dashboard.categories.index', compact('categories'));
+    }
 
-     }
-     public function index(Request $request)
-     {
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('dashboard.categories.create');
+    }
 
-         $categories = Categroy::latest()->paginate(5);
-         return view('dashboard.categories.index',compact('categories'));
-     }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(CategoryRequest $request)
+    {
 
-     /**
-      * Show the form for creating a new resource.
-      *
-      * @return \Illuminate\Http\Response
-      */
-     public function create()
-     {
-         return view('dashboard.categories.create');
+        Categroy::create($request->all());
+        session()->flash('success', __('site.added_successfully'));
+        return redirect()->route('dashboard.categories.index');
+    }
 
-     }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Categroy  $category
+     * @return \Illuminate\Http\Response
+     */
+    public function show()
+    {
+        //
+    }
 
-     /**
-      * Store a newly created resource in storage.
-      *
-      * @param  \Illuminate\Http\Request  $request
-      * @return \Illuminate\Http\Response
-      */
-     public function store(CategoryRequest $request )
-     {
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param \App\Models\Categroy  $category
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Categroy $category)
+    {
+        return view('dashboard.categories.edit', compact('category'));
+    }
 
-         Categroy::create($request->validated());
-         return redirect()->route('dashboard.categories.index');
-     }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Categroy  $category
+     * @return \Illuminate\Http\Response
+     */
+    public function update(CategoryRequest $request, Categroy $category)
+    {
+        $category->update($request->except('cat_id'));
+        session()->flash('success', __('site.updated_successfully'));
+        return redirect()->route('dashboard.categories.index');
+    }
 
-     /**
-      * Display the specified resource.
-      *
-      * @param  \App\Models\Categroy  $category
-      * @return \Illuminate\Http\Response
-      */
-     public function show()
-     {
-         //
-     }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param   \App\Models\Categroy  $category
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Categroy $category)
+    {
 
-     /**
-      * Show the form for editing the specified resource.
-      *
-      * @param \App\Models\Categroy  $category
-      * @return \Illuminate\Http\Response
-      */
-     public function edit(Categroy $category)
-     {
-         return view('dashboard.categories.edit',compact('category'));
-     }
-
-     /**
-      * Update the specified resource in storage.
-      *
-      * @param  \Illuminate\Http\Request  $request
-      * @param  \App\Models\Categroy  $category
-      * @return \Illuminate\Http\Response
-      */
-     public function update(CategoryRequest $request, Categroy $category)
-     {
-         $category->update($request->validated());
-         session()->flash('success',__('site.updated_successfully'));
-         return redirect()->route('dashboard.categories.index');
-     }
-
-     /**
-      * Remove the specified resource from storage.
-      *
-      * @param   \App\Models\Categroy  $category
-      * @return \Illuminate\Http\Response
-      */
-     public function destroy(Categroy $category)
-     {
-
-         $category->delete();
-         session()->flash('success',__('site.deleted_successfully'));
-         return redirect()->route('dashboard.categories.index');
-
-     }
+        $category->delete();
+        session()->flash('success', __('site.deleted_successfully'));
+        return redirect()->route('dashboard.categories.index');
+    }
 }

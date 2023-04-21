@@ -14,6 +14,7 @@ Route::group(
             Route::get('/index',[DashboardController::class,'index'] )->name('index');
             Route::resource('users',UserController::class);
             Route::resource('categories',CategoryController::class);
+            Route::resource('products',ProductController::class);
         });
     });
 

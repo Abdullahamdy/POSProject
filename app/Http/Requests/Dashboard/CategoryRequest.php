@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Dashboard;
 
 use Illuminate\Foundation\Http\FormRequest;
+use CodeZero\UniqueTranslation\UniqueTranslationRule;
 
 class CategoryRequest extends FormRequest
 {
@@ -23,9 +24,24 @@ class CategoryRequest extends FormRequest
      */
     public function rules()
     {
+        switch ($this->method()) {
+            case 'POST':
+            {
+                return [
+                 'name.*' =>   ['required', UniqueTranslationRule::for('categroys')],
 
-        return [
-            'name' => 'required|max:20',
-        ];
+                ];
+            }
+            case 'PUT':
+            case 'PATCH':
+                {
+                return [
+                    'name.*' =>  UniqueTranslationRule::for('categroys')->ignore(request()->cat_id),
+
+
+                ];
+            }
+            default: break;
+    }
     }
 }

@@ -27,16 +27,19 @@
 
                     @include('partials._errors')
 
-                    <form action="{{ route('dashboard.categories.store') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('dashboard.categories.store') }}" method="post">
 
                         {{ csrf_field() }}
                         {{ method_field('post') }}
 
+                        @foreach (config('support_language.locales') as $lang)
+
                         <div class="form-group">
-                            <label>@lang('site.name')</label>
-                            <input type="text" name="name" class="form-control" value="{{ old('name') }}">
+                            <label>@lang('site.'.$lang.'.name')</label>
+                            <input type="text" name="name[{{ $lang }}]" class="form-control" value="{{old('name.'.$lang) }}">
                         </div>
 
+                        @endforeach
 
 
                         <div class="form-group">

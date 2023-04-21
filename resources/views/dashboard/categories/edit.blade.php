@@ -31,11 +31,14 @@
 
                         {{ csrf_field() }}
                         {{ method_field('put') }}
-
-                        <div class="form-group">
-                            <label>@lang('site.name')</label>
-                            <input type="text" name="name" class="form-control" value="{{ $category->name }}">
-                        </div>
+                        @foreach (config('support_language.locales') as $lang)
+                            <div class="form-group">
+                                <label>@lang('site.' . $lang . '.name')</label>
+                                <input type="text" name="name[{{ $lang }}]" class="form-control"
+                                    value="{{ $category->Namelang[$lang] }}">
+                            </div>
+                        @endforeach
+                        <input type="hidden" name="cat_id" value="{{ $category->id }}">
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary"><i class="fa fa-edit"></i> @lang('site.edit')</button>
