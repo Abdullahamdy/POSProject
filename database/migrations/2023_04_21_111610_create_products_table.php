@@ -18,12 +18,11 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('cat_id');
             $table->foreign('cat_id')->references('id')->on('categroys')->onDelete('cascade');
             $table->string('name');
-            $table->string('image')->nullable();
+            $table->string('image')->default('default.png');
             $table->double('purchase_price',8,2);
             $table->double('sale_price',8,2);
             $table->integer('stock');
             $table->text('description');
-
             $table->timestamps();
         });
     }

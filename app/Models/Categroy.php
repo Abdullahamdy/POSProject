@@ -16,7 +16,7 @@ class Categroy extends Model
     protected $guarded = [];
     public function product()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class,'cat_id');
     }
     public function getNamelangAttribute()
     {

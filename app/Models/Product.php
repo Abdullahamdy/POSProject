@@ -10,15 +10,22 @@ class Product extends Model
 {
     use HasTranslations;
 
-    public $translatable = ['name','description'];
     use HasFactory;
+    public $translatable = ['name','description'];
     protected $guarded = [];
+
+    protected $appends = ['profit_percent'];
     public function category(){
         return $this->belongsTo(Categroy::class,'cat_id');
     }
 
     public function getImagePathAttribute(){
         return asset('uploads/products/'.$this->image);
+    }
+    public function getProfitPercentAttribute(){
+        $profit =  $this->purchase_price - $this->sale_price;
+        $profit_percent  = $profit * 100 / $this->purchase_price;
+        return number_format($profit_percent,2);
     }
     public function getNamelangAttribute()
     {

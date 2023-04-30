@@ -26,7 +26,7 @@ class CategoryController extends Controller
     }
     public function index(Request $request)
     {
-        $categories = Categroy::when($request->search, function ($query) use ($request) {
+        $categories = Categroy::withCount('product')->when($request->search, function ($query) use ($request) {
             return $query->where('name', 'like', '%' . $request->search . '%');
         })->latest()->paginate(5);
         return view('dashboard.categories.index', compact('categories'));

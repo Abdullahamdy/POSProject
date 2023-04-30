@@ -45,6 +45,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>@lang('site.name')</th>
+                                        <th>@lang('site.related_products')</th>
 
                                     </tr>
                                 </thead>
@@ -55,6 +56,7 @@
                                         <tr>
                                             <td>{{ ++$index }}</td>
                                             <td>{{ $category->name }}</td>
+                                            <td><a href="{{ route('dashboard.products.index',['cat_id'=>$category->id]) }}" class="btn btn-primary">{{ $category->product_count }}</a></td>
 
                                             <td>
                                                 @if (auth()->user()->hasPermission('categories-update'))

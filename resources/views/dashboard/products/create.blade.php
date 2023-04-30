@@ -50,7 +50,7 @@
                             <select class="form-control" name="cat_id" id="">
                                 <option value="">---</option>
                                 @forelse ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                <option value="{{ $category->id }}" {{ old('cat_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                                 @empty
 
                                 @endforelse

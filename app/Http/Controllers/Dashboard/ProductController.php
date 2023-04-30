@@ -20,7 +20,10 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $products  = Product::when($request->search,function($query) use($request){
-            $query->where('name','like','%'.$request->search.'%');
+            $query->where('name->ar','like','%'.$request->search.'%');
+            $query->orWhere('name->en','like','%'.$request->search.'%');
+        })->when($request->cat_id,function($query) use($request){
+            $query->where('cat_id',$request->cat_id);
         })->latest()->paginate(5);
         return view('dashboard.products.index',compact('products'));
 
