@@ -27,7 +27,6 @@ class RouteServiceProvider extends ServiceProvider
      * @var string|null
      */
     // protected $namespace = 'App\\Http\\Controllers';
-     protected $dashboard_namespace = 'App\Http\Controllers\Dashboard';
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -50,7 +49,7 @@ class RouteServiceProvider extends ServiceProvider
 
 
                 Route::middleware('web')
-                ->namespace($this->dashboard_namespace)
+                ->namespace($this->namespace)
                 ->group(base_path('routes/Dashboard/web.php'));
         });
 

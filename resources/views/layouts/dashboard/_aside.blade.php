@@ -37,6 +37,7 @@
             @if (auth()->user()->hasPermission('clients-read'))
             <li><a href="{{ route('dashboard.clients.index') }}"><i class="fa fa-users"></i><span>@lang('site.clients')</span></a></li>
                @endif
+            
             {{--<li class="treeview">--}}
             {{--<a href="#">--}}
             {{--<i class="fa fa-pie-chart"></i>--}}

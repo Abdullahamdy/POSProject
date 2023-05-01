@@ -28,20 +28,20 @@ class ClientRequest extends FormRequest
             {
                 return [
                     'name'    =>  'required',
-                    'phone.0' =>  'required|distinct' ,
-                    'phone.*' =>  'required|distinct' ,
+                    'phone' =>  'required|array|min:1' ,
+                    'phone.0' =>  'required' ,
                     'address' =>  'required' ,
 
                 ];
             }
             case 'PUT':
-            case 'PATCH':
+                case 'PATCH':
                 {
-                return [
-                    'name'    =>  'required',
-                    'phone.0' =>  'required|distinct' ,
-                    'phone.*' =>  'required|distinct' ,
-                    'address' =>  'required' ,
+                    return [
+                        'name'    =>  'required',
+                        'phone' =>  'required|array|min:1' ,
+                        'phone.0' =>  'required' ,
+                        'address' =>  'required' ,
 
                 ];
             }

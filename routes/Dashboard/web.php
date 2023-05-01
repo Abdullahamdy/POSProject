@@ -1,7 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Dashboard\UserController;
+use App\Http\Controllers\Dashboard\ClientController;
+use App\Http\Controllers\Dashboard\ProductController;
+use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\Client\OrderController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 
@@ -16,6 +21,7 @@ Route::group(
             Route::resource('categories',CategoryController::class);
             Route::resource('products',ProductController::class);
             Route::resource('clients',ClientController::class);
+            Route::resource('clients.orders',OrderController::class);
         });
     });
 
