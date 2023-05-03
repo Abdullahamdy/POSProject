@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Dashboard\Client;
 
-use App\Http\Controllers\Controller;
-use App\Models\Categroy;
 use App\Models\Client;
+use App\Models\Product;
+use App\Models\Categroy;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Order;
 
 class OrderController extends Controller
 {
@@ -26,9 +28,9 @@ class OrderController extends Controller
      */
     public function create(Client $client)
     {
-
+        $orders = Order::paginate(5);
         $categories = Categroy::with('product')->get();
-        return view('dashboard.clients.orders.create',compact('categories','client'));
+        return view('dashboard.clients.orders.create',compact('categories','client','orders'));
     }
 
     /**
@@ -37,10 +39,19 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Client $client)
     {
-        //
-    }
+        $request->validate([
+            'products' => 'required|array',
+        ]);
+
+        $this->attach_order($request, $client);
+
+        session()->flash('success', __('site.added_successfully'));
+
+        return redirect()->route('dashboard.orders.index');
+
+    }//
 
     /**
      * Display the specified resource.
@@ -48,33 +59,31 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    private function attach_order($request, $client)
     {
-        //
-    }
+        $order = $client->orders()->create([]);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        $order->products()->attach($request->products);
+
+        $total_price = 0;
+        foreach ($request->products as $id => $quantity) {
+
+            $product = Product::FindOrFail($id);
+            $total_price += $product->sale_price * $quantity['quantity'];
+
+            $product->update([
+                'stock' => $product->stock - $quantity['quantity']
+            ]);
+
+        }//end of foreach
+
+        $order->update([
+            'total_price' => $total_price
+        ]);
+
+    }//end of attach order
+
 
     /**
      * Remove the specified resource from storage.

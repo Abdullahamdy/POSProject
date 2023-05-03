@@ -35,4 +35,7 @@ class Product extends Model
     {
         return  @((array)json_decode($this->attributes['description'])) ?? false;
     }
+    public function orders(){
+        return $this->belongsToMany(Order::class,'product_order');
+    }
 }

@@ -9,7 +9,7 @@
             <h1>@lang('site.clients')</h1>
 
             <ol class="breadcrumb">
-                <li><a href="{{ route('dashboard.index') }}"><i class="fa fa-dashboard"></i> @lang('site.dashboard')</a></li>
+                <li><a href="{{ route('dashboard.welcome') }}"><i class="fa fa-dashboard"></i> @lang('site.dashboard')</a></li>
                 <li><a href="{{ route('dashboard.clients.index') }}"> @lang('site.clients')</a></li>
                 <li class="active">@lang('site.edit')</li>
             </ol>
@@ -37,7 +37,7 @@
                                 <input type="text" name="name" class="form-control"
                                     value="{{ $client->name }}">
                             </div>
-                           
+
                             @for ($i = 0; $i<2;$i++)
                             <div class="form-group">
                                 <label>@lang('site.phone')</label>
