@@ -19,6 +19,7 @@ Route::group(
         Route::prefix('dashboard')->name('dashboard.')->middleware(['auth'])->group(function () {
             Route::get('/',[WelcomeController::class,'index'] )->name('welcome');
             Route::resource('orders', DashboardOrderController::class);
+            Route::get('/orders/{order}/products',[ DashboardOrderController::class,'products'])->name('orders.products');
             Route::resource('users',UserController::class);
             Route::resource('categories',CategoryController::class);
             Route::resource('products',ProductController::class);
