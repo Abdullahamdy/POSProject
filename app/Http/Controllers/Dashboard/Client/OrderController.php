@@ -91,6 +91,32 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     public function edit(Client $client ,Order $order){
+        $categories = Categroy::with('product')->get();
+        $orders = $client->orders()->with('products')->paginate(5);
+        return view('dashboard.clients.orders.edit',compact('client','order','categories','orders'));
+
+     }
+     public function update(Request $request,Client $client,Order $order){
+        $request->validate([
+            'products' => 'required|array',
+        ]);
+        $this->detach_order($order);
+        $this->attach_order($request ,$client);
+        session()->flash('success',__('site.updated_successfully'));
+        return redirect()->route('dashboard.orders.index');
+     }
+
+     private function detach_order($order){
+        foreach($order->products as $product){
+            $product->update([
+              'stock'=> $product->stock + $product->pivot->quantity,
+            ]);
+          }
+          $order->delete();
+
+     }
     public function destroy($id)
     {
         //

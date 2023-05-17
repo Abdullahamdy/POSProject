@@ -83,22 +83,22 @@
                                                     <i class="fa fa-list"></i>
                                                     @lang('site.show')
                                                 </button>
-                                                @if (auth()->user()->hasPermission('update_orders'))
+                                                {{-- @if (auth()->user()->hasPermission('update_orders')) --}}
                                                     <a href="{{ route('dashboard.clients.orders.edit', ['client' => $order->client->id, 'order' => $order->id]) }}" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i> @lang('site.edit')</a>
-                                                @else
+                                                {{-- @else
                                                     <a href="#" disabled class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> @lang('site.edit')</a>
-                                                @endif
+                                                @endif --}}
 
-                                                @if (auth()->user()->hasPermission('delete_orders'))
+                                                {{-- @if (auth()->user()->hasPermission('delete_orders')) --}}
                                                     <form action="{{ route('dashboard.orders.destroy', $order->id) }}" method="post" style="display: inline-block;">
                                                         {{ csrf_field() }}
                                                         {{ method_field('delete') }}
                                                         <button type="submit" class="btn btn-danger btn-sm delete"><i class="fa fa-trash"></i> @lang('site.delete')</button>
                                                     </form>
 
-                                                @else
+                                                {{-- @else
                                                     <a href="#" class="btn btn-danger btn-sm" disabled><i class="fa fa-trash"></i> @lang('site.delete')</a>
-                                                @endif
+                                                @endif --}}
 
                                             </td>
 
