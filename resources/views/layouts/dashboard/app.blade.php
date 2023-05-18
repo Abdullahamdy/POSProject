@@ -33,6 +33,7 @@
         .mr-2{
             margin-right: 5px;
         }
+
         .loader {
             border: 5px solid #f3f3f3;
             border-radius: 50%;
@@ -42,6 +43,7 @@
             -webkit-animation: spin 1s linear infinite; /* Safari */
             animation: spin 1s linear infinite;
         }
+
         /* Safari */
         @-webkit-keyframes spin {
             0% {
@@ -51,6 +53,7 @@
                 -webkit-transform: rotate(360deg);
             }
         }
+
         @keyframes spin {
             0% {
                 transform: rotate(0deg);
@@ -59,6 +62,7 @@
                 transform: rotate(360deg);
             }
         }
+
     </style>
     {{--<!-- jQuery 3 -->--}}
     <script src="{{ asset('dashboard_files/js/jquery.min.js') }}"></script>
@@ -184,7 +188,7 @@
 
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="{{ asset('dashboard_files/img/user2-160x160.jpg') }}" class="user-image" alt="User Image">
-                            <span class="hidden-xs">{{ auth()->user()->first_name ?? '' }} {{ auth()->user()->last_name ?? '' }}</span>
+                            <span class="hidden-xs">{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</span>
                         </a>
                         <ul class="dropdown-menu">
 
@@ -193,7 +197,7 @@
                                 <img src="{{ asset('dashboard_files/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
 
                                 <p>
-                                    {{ auth()->user()->first_name ?? '' }} {{ auth()->user()->last_name ?? ''}}
+                                    {{ auth()->user()->first_name }} {{ auth()->user()->last_name }}
                                     <small>Member since 2 days</small>
                                 </p>
                             </li>
@@ -266,16 +270,22 @@
 
 <script>
     $(document).ready(function () {
+
         $('.sidebar-menu').tree();
+
         //icheck
         $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
             checkboxClass: 'icheckbox_minimal-blue',
             radioClass: 'iradio_minimal-blue'
         });
+
         //delete
         $('.delete').click(function (e) {
+
             var that = $(this)
+
             e.preventDefault();
+
             var n = new Noty({
                 text: "@lang('site.confirm_delete')",
                 type: "warning",
@@ -284,13 +294,17 @@
                     Noty.button("@lang('site.yes')", 'btn btn-success mr-2', function () {
                         that.closest('form').submit();
                     }),
+
                     Noty.button("@lang('site.no')", 'btn btn-primary mr-2', function () {
                         n.close();
                     })
                 ]
             });
+
             n.show();
+
         });//end of delete
+
         // // image preview
         // $(".image").change(function () {
         //
@@ -305,7 +319,9 @@
         //     }
         //
         // });
+
         CKEDITOR.config.language =  "{{ app()->getLocale() }}";
+
     });//end of ready
 
 </script>
